@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- local css -->
+    <link rel="stylesheet" href="{% static 'css/materialize.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
+
+    <!-- api key -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js"></script>
+    
+    <!-- icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <title>unocabs</title>
+</head>
+
+
+<body>
+    <!-- Load the `mapbox-gl-geocoder` plugin. -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+    
+
+    <!-- menu -->
+    <!-- menu class name menu-links -->
+    {% include 'partials/_menu.html' %}
+
+    <!-- backgroung white backgrund menu -->
+    <div class="menu" id="menu"> </div>
+
+    <!-- just icon cross and hamburger -->
+    <div id="navbar" onclick="showmenu()">
+        <i class="material-icons nav-icon">dehaze</i>
+    </div>
+
+
+    {% block content  %} {% endblock %}
+
+
+</body>
+<!-- pro javascript -->
+<script src="{% static 'js/materialize.min.js'  %}"></script>
+<script src="{% static 'js/menu.js'  %}"></script>
+<script src="{% static 'js/mapMaths.js'  %}"></script>
+
+</html>

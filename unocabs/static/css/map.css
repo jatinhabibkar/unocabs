@@ -1,0 +1,90 @@
+html{
+    font-family: 'Roboto', sans-serif;
+
+}
+
+
+
+#map {
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+    width: 100%;
+}
+
+.marker {
+    background-image: url('../img/marker/marker.svg');
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.mapboxgl-popup {
+    max-width: 200px;
+}
+
+.mapboxgl-popup-content {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+}
+
+
+#navbar {
+    position: absolute;
+    top: 0;
+    height: 80px;
+    width: 80px;
+    z-index: 100;
+    background-color: #fff;
+    left: 0;
+    margin: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+
+.nav-icon {
+    margin-left: 50%;
+    transform: translate(-50%, -50%);
+    margin-top: 50%;
+    font-size: 40px !important;
+}
+
+.menu {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    height: 40px;
+    width: 40px;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    background-color: rgb(255, 255, 255,0.8);
+    border-radius: 50%;
+    transition-timing-function: ease-in;
+}
+.nav-links{
+    position: absolute;
+    z-index: 100;
+    list-style-type: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    line-height: 100px;
+    text-align: center;
+    display: none;
+    transition-timing-function: ease;
+}
+
+
+.nav-links li a {
+    color: #000000de;
+    text-decoration: none;
+    font-size: 60px;
+    text-transform: uppercase;
+}
+
+
+
+

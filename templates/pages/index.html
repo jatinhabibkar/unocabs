@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+<div id="map"> </div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoiam9raXNhIiwiYSI6ImNrdjlnZ3VzbTI5ZWMyb3MzODdjZHJtdWoifQ.SnSidhgmX2ScTl7ej7--rQ';
+var userlog = ''
+var userlat = ''
+
+const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    style: 'mapbox://styles/mapbox/streets-v11', // style URL
+    center: [73.1307, 18.9968], // starting position [lng, lat]
+    zoom: 10 // starting zoom
+})
+
+const geojson = {
+    'type': 'FeatureCollection',
+
+    'features': [{
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': [73.1307, 18.9968]
+            },
+            'properties': {
+                'title': 'home',
+                'description': 'nimbeshwar angan'
+            }
+        },
+        {
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': [73.1307, 18.9978]
+            },
+            'properties': {
+                'title': 'noice',
+                'description': 'baju ka ghar'
+            }
+        }
+    ]
+};
+
+for (const feature of geojson.features) {
+    // create a HTML element for each feature
+    const el = document.createElement('div');
+    el.className = 'marker';
+
+    // make a marker for each feature and add it to the map
+    new mapboxgl.Marker(el)
+        .setLngLat(feature.geometry.coordinates)
+        .setPopup(
+            new mapboxgl.Popup({
+                offset: 25
+            }) // add popups
+            .setHTML(
+                `<h5>${feature.properties.title}</h5><p>${feature.properties.description}</p>`
+            )
+        )
+        .addTo(map);
+}
+
+
+
+// user location 
+map.addControl(
+    new mapboxgl.GeolocateControl({
+        positionOptions: {
+            enableHighAccuracy: true
+        },
+        // When active the map will receive updates to the device's location as it changes.
+        trackUserLocation: true,
+        // Draw an arrow next to the location dot to indicate which direction the device is heading.
+        showUserHeading: true
+}))
+
+
+
+
+
+
+function plotpoint(obj, lng, lat) {
+    console.log("working");
+    const el = document.createElement('div');
+    el.className = 'marker';
+    new mapboxgl.Marker(el).setLngLat([lat, lng]).setPopup(
+        new mapboxgl.Popup({
+            offset: 25
+        }) // add popups
+        .setHTML(
+            `<h1>noice</h1>`
+        )
+    ).addTo(obj)
+}
+
+</script>
+
+
+{% endblock content %}
