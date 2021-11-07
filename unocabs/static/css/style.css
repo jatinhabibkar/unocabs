@@ -15,6 +15,11 @@
 }
 
 
+.dropdown-content li>a, .dropdown-content li>span{
+  color: #424242 !important;
 
+}
+.input-field .prefix.active {
+  color: #424242 !important;
 
-
+}

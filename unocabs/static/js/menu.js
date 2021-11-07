@@ -21,8 +21,6 @@ function openmenu(icon, menu, nav) {
     icon.style.transform = 'rotate(90deg)';
     menuHW(menu, "600vh")
     fadeIn(nav)
-
-    console.log(menu)
 }
 
 
@@ -35,7 +33,6 @@ function closemenu(icon, menu, nav,bd) {
 }
 
 function menuHW(menu, size) {
-    delayit(menu, 0.3)
     menu.style.height = size
     menu.style.width = size
 }

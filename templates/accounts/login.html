@@ -10,12 +10,20 @@
             <div class="section"></div>
 
             <h5 class="grey-text">Please, login into your account</h5>
+            <!-- {% if user.is_authenticated %}
+                <h1>u logged in</h1>
+            {% else %}
+                <h1>plz login</h1>
+            {% endif %} -->
+
             <div class="section"></div>
 
             <div class="container ">
                 <div class="z-depth-1 grey lighten-4 row" style="padding: 30px; height: 100%;">
 
-                    <form action="/adminpage" class="col s12" method="post">
+                    <form action="{% url 'login' %}" class="col s12" method="post">
+                        {% include 'partials/_alert.html' %}
+                        {% csrf_token %}
                         <div class='row'>
                             <div class='col s12'>
                             </div>

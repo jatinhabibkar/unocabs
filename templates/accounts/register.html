@@ -10,12 +10,17 @@
         <div class="section"></div>
 
         <h5 class="grey-text">Please, login into your account</h5>
+        
+
+
         <div class="section"></div>
 
         <div class="container ">
+            
             <div class="z-depth-1 grey lighten-4 row" style="padding: 30px; height: 100%;">
 
                 <form action="{% url 'register' %}" class="col s12" method="post">
+                    {% include 'partials/_alert.html' %}
                     {% csrf_token %}
                     <div class='row'>
                         <div class='col s12'>
@@ -25,7 +30,7 @@
                     <div class="row">
                         <div class="input-field col s12">
                             <input name="username" id="username" type="text" class="validate" required>
-                            <label for="username">User Name</label>
+                            <label for="username">Name</label>
                         </div>
                     </div>
 
@@ -36,6 +41,7 @@
                         </div>
                     </div>
 
+
                     <div class="row">
                         <div class="input-field col s12">
                             <input name="password" id="password" type="password" class="validate" required>
@@ -45,10 +51,11 @@
 
                     <div class="row">
                         <div class="input-field col s12">
-                            <input id="password2" type="password" class="validate" required>
+                            <input name="password2" id="password2" type="password" class="validate" required>
                             <label for="password2">Confirm password</label>
                         </div>
                     </div>
+                    
 
 
 

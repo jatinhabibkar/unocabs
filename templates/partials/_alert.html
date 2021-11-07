@@ -1,0 +1,36 @@
+{% if messages %}
+
+
+{% for message in messages %}
+<div id="alerthai">
+    <div class="chip" style="display:contents">
+        <div class="card-panel {{message.tags}} darken-1 ">
+            <i class="material-icons white-text">info</i>
+            <span class="white-text text-darken-2" style="vertical-align: super; font-size: large;">
+                <strong>
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    Error:
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                    Success:
+                    {% else %}
+                    {{ message.tags|title }}
+                    {% endif %}
+                </strong>
+                {{ message }}
+            </span>
+            <i class="close material-icons white-text right">close</i>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+
+
+<script>
+    window.onload = (event) => {
+        setTimeout(() => {
+            document.getElementById('alerthai').style.display = 'none'
+        }, 3000);
+    }
+</script>

@@ -63,6 +63,7 @@ html{
     background-color: rgb(255, 255, 255,0.8);
     border-radius: 50%;
     transition-timing-function: ease-in;
+    transition-duration: 0.3s;
 }
 .nav-links{
     position: absolute;

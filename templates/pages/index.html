@@ -6,23 +6,26 @@
 {% block content %}
 
 <div id="map"> </div>
+<a class="waves-effect waves-light btn black-text white mybtn" onclick="sendapirequest()">search for cabs</a>
+
 
 <script>
     mapboxgl.accessToken = 'pk.eyJ1Ijoiam9raXNhIiwiYSI6ImNrdjlnZ3VzbTI5ZWMyb3MzODdjZHJtdWoifQ.SnSidhgmX2ScTl7ej7--rQ';
-var userlog = ''
-var userlat = ''
+    var userlog = 0
+    var userlat = 0
+    var km = 1
 
-const map = new mapboxgl.Map({
-    container: 'map', // container ID
-    style: 'mapbox://styles/mapbox/streets-v11', // style URL
-    center: [73.1307, 18.9968], // starting position [lng, lat]
-    zoom: 10 // starting zoom
-})
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        style: 'mapbox://styles/mapbox/streets-v11', // style URL
+        center: [73.1307, 18.9968], // starting position [lng, lat]
+        zoom: 10 // starting zoom
+    })
 
-const geojson = {
-    'type': 'FeatureCollection',
+    const geojson = {
+        'type': 'FeatureCollection',
 
-    'features': [{
+        'features': [{
             'type': 'Feature',
             'geometry': {
                 'type': 'Point',
@@ -32,74 +35,99 @@ const geojson = {
                 'title': 'home',
                 'description': 'nimbeshwar angan'
             }
-        },
-        {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [73.1307, 18.9978]
-            },
-            'properties': {
-                'title': 'noice',
-                'description': 'baju ka ghar'
-            }
-        }
-    ]
-};
-
-for (const feature of geojson.features) {
-    // create a HTML element for each feature
-    const el = document.createElement('div');
-    el.className = 'marker';
-
-    // make a marker for each feature and add it to the map
-    new mapboxgl.Marker(el)
-        .setLngLat(feature.geometry.coordinates)
-        .setPopup(
-            new mapboxgl.Popup({
-                offset: 25
-            }) // add popups
-            .setHTML(
-                `<h5>${feature.properties.title}</h5><p>${feature.properties.description}</p>`
-            )
-        )
-        .addTo(map);
-}
+        }]
+    };
 
 
-
-// user location 
-map.addControl(
-    new mapboxgl.GeolocateControl({
+    var glc = new mapboxgl.GeolocateControl({
         positionOptions: {
             enableHighAccuracy: true
         },
         // When active the map will receive updates to the device's location as it changes.
         trackUserLocation: true,
         // Draw an arrow next to the location dot to indicate which direction the device is heading.
-        showUserHeading: true
-}))
+        showUserHeading: true,
+    })
 
+    glc.on('geolocate', (e) => {
+        userlat = e.coords.latitude
+        userlog = e.coords.longitude
+        plotpoints()
+    })
 
+    function sendapirequest() {
+        if (userlat !== 0 && userlog !== 0) {
+            console.log(userlat, userlog, km);
+        } else {
+            glc.trigger()
+        }
+    }
+    // user location 
+    map.addControl(glc)
 
-
-
-
-function plotpoint(obj, lng, lat) {
-    console.log("working");
-    const el = document.createElement('div');
-    el.className = 'marker';
-    new mapboxgl.Marker(el).setLngLat([lat, lng]).setPopup(
-        new mapboxgl.Popup({
-            offset: 25
-        }) // add popups
-        .setHTML(
-            `<h1>noice</h1>`
-        )
-    ).addTo(obj)
-}
-
+    function plotpoints() {
+        console.log("plotting ");
+        for (const feature of geojson.features) {
+            const el = document.createElement('div');
+            el.className = 'marker';
+            new mapboxgl.Marker(el)
+                .setLngLat(feature.geometry.coordinates)
+                .setPopup(
+                    new mapboxgl.Popup({
+                        offset: 25
+                    }) // add popups
+                    .setHTML(
+                        `
+                        <h5>panvel <i class= "material-icons">directions_bike</i> pune</h5>
+                        <p>Date & Time : 21/10/2021 2:00pm</p>
+                        <a class="waves-effect waves-light btn white-text black">book the cab</a>
+                        
+                        `
+                    )
+                )
+                .addTo(map);
+        }
+    }
 </script>
+
+
+
+<style>
+    .geocoder {
+        position: absolute;
+        right: 8px;
+        top: 10px;
+
+    }
+
+    .mybtn {
+        bottom: 0;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-bottom: 30px;
+        border-radius: 50px;
+        width: 200px;
+    }
+
+    .selecter {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 4;
+        margin: 10px;
+        width: 150px;
+    }
+
+    .selecter>div>input {
+        margin: 0 !important;
+        text-align: center;
+    }
+
+    .selecter li>span {
+        color: #424242 !important;
+    }
+</style>
 
 
 {% endblock content %}
