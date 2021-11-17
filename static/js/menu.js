@@ -27,7 +27,7 @@ function openmenu(icon, menu, nav) {
 function closemenu(icon, menu, nav,bd) {
     delayit(icon, 0.3)
     icon.style.transform = 'rotate(180deg)';
-    menuHW(menu, "79px")
+    menuHW(menu, "40px")
     icon.innerHTML = `<i class="material-icons nav-icon">dehaze</i>`;
     fadeOut(nav)
 }

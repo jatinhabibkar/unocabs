@@ -5,12 +5,18 @@
 
 <main style="margin-top: 80px; overflow: hidden;">
 
+
     <div class="section"></div>
 
-    <h5 class="grey-text center">Turn on location for better experience</h5>
+    <h5 class="grey-text center">Add a cab service</h5>
+    
     <div class="section"></div>
+
+
 
     <div class="container ">
+        {% include 'partials/_alert.html' %}
+
         <div class="z-depth-1 grey lighten-4 row" style="padding: 20px;">
 
             <form action="{% url 'addride' %}" class="col s12" method="post">
@@ -31,6 +37,25 @@
                 </div>
 
                 <div class="row">
+
+                    <div class="input-field col s12 m6 text-darken ">
+                        <select name="vehicle" required>
+                            <option value="" disabled selected>Choose your vehicle</option>
+                            <option class="text-darken" value="directions_bike ">2 wheeler</option>
+                            <option class="text-darken" value="time_to_leave">4 wheeler</option>
+                        </select>
+                    </div>
+
+                    <div class="input-field col m6 s12">
+                        <i class="material-icons prefix">local_phone</i>
+                        <input name="tel" id="icon_prefix3" type="tel" required>
+                        <label for="icon_prefix3">Phone number</label>
+                    </div>
+
+
+                </div>
+
+                <div class="row">
                     <br>
                     <ul class="collapsible expandable">
                         <li class="active">
@@ -41,7 +66,9 @@
                             <div class="collapsible-body p-0" style="display: inline;">
                                 <div class="geocoder" id="geocoder1"></div>
                                 <div id='map1' style='width: 100%; height: 300px;'></div>
-                                <input type="text" id="location1" name="location1" style="display: none;" required>
+                                <input type="hidden" id="location1" name="location1" required>
+                                <input type="hidden" id="locationname1" name="locationname1" required>
+
                             </div>
                         </li>
                         <li class="active">
@@ -52,10 +79,12 @@
                             <div class="collapsible-body p-0" style="display: inline;">
                                 <div class="geocoder" id="geocoder2"></div>
                                 <div id='map2' style='width: 100%; height: 300px;'></div>
-                                <input type="text" id="location2" name="location2" style="display: none;" required>
+                                <input type="hidden" id="location2" name="location2" required>
+                                <input type="hidden" id="locationname2" name="locationname2" required>
                             </div>
                         </li>
                     </ul>
+
 
 
                     <div class="col s6">
@@ -68,49 +97,13 @@
                             required>
 
                     </div>
-
-
-
-
                 </div>
-
-                <div class="row">
-
-                    <div class="input-field col s12 m6 text-darken ">
-                        <select name="vehicle" required>
-                            <option value="" disabled selected>Choose your vehicle</option>
-                            <option class="text-darken" value="directions_bike ">2 wheeler</option>
-                            <option class="text-darken" value="time_to_leave">4 wheeler</option>
-                        </select>
-                        <label>Materialize Select</label>
-                    </div>
-
-                </div>
-
-
-                <div class="row">
-
-                    <div class="input-field col s12 m6 text-darken ">
-                        <select name="seats" required>
-                            <option value="" disabled selected>Seats available</option>
-                            <option class="text-darken" value="directions_bike ">1</option>
-                            <option class="text-darken" value="time_to_leave">2</option>
-                            <option class="text-darken" value="time_to_leave">3</option>
-                        </select>
-                        <label>Materialize Select</label>
-                    </div>
-
-                </div>
-
-
                 <br />
 
                 <div class='row'>
                     <button type='submit' name='btn_login'
-                        class='col s12 btn btn-large waves-effect  grey darken-3 white-text'>Add to the
-                        map</button>
+                        class='col s12 btn btn-large waves-effect  grey darken-3 white-text'>Add to the map</button>
                 </div>
-
             </form>
         </div>
 
@@ -160,7 +153,8 @@
 
 
 
-
+    var data1;
+    var data2;
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoiam9raXNhIiwiYSI6ImNrdjlnZ3VzbTI5ZWMyb3MzODdjZHJtdWoifQ.SnSidhgmX2ScTl7ej7--rQ';
     const map1 = new mapboxgl.Map({
@@ -177,7 +171,8 @@
     });
 
     geocoder1.on('result', (event) => {
-        udpate1(event.result.center)
+        data1 = event.result        
+        udpate1(event.result)
     });
 
     document.getElementById('geocoder1').appendChild(geocoder1.onAdd(map1));
@@ -188,12 +183,16 @@
     //     udpate1([lnglat['lng'], lnglat['lat']])
     // })
     var location1 = document.getElementById('location1')
+    var locationname1 =document.getElementById('locationname1')
+    
     const udpate1 = (data) => {
-        location1.value = data
-        document.getElementById('loc1').innerHTML = `[${Number(data[0]).toFixed(3)},${Number(data[1]).toFixed(3)}]`
+        console.log(data);
+        location1.value = data['center']
+        locationname1.value = data['place_name_en-US']
+        document.getElementById('loc1').innerHTML = `[${Number(data['center'][0]).toFixed(3)},${Number(data['center'][1]).toFixed(3)}]`
     }
 
-
+    // https://api.mapbox.com/geocoding/v5/mapbox.places/starbucks.json?bbox=-77.083056,38.908611,-76.997778,38.959167&access_token=pk.eyJ1Ijoiam9raXNhIiwiYSI6ImNrdjlnZ3VzbTI5ZWMyb3MzODdjZHJtdWoifQ.SnSidhgmX2ScTl7ej7--rQ
 
 
 
@@ -210,11 +209,14 @@
     });
 
     geocoder2.on('result', (event) => {
-        udpate2(event.result.center)
+        
+        console.log(JSON.stringify(event.result, null, 2))
+        udpate2(event.result)
     });
     // map work
     document.getElementById('geocoder2').appendChild(geocoder2.onAdd(map2));
     var location2 = document.getElementById('location2')
+    var locationname2 =document.getElementById('locationname2')
 
     // map2.on('click', (e) => {
     //     const lnglat = e.lngLat.wrap()
@@ -222,8 +224,9 @@
     //     udpate2([lnglat['lng'], lnglat['lat']])
     // })
     const udpate2 = (data) => {
-        location2.value = data
-        document.getElementById('loc2').innerHTML = `[${Number(data[0]).toFixed(3)},${Number(data[1]).toFixed(3)}]`
+        location2.value = data['center']
+        locationname2.value = data['place_name_en-US']
+        document.getElementById('loc2').innerHTML = `[${Number(data['center'][0]).toFixed(3)},${Number(data['center'][1]).toFixed(3)}]`
     }
 </script>
 

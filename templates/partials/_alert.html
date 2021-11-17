@@ -1,8 +1,7 @@
-{% if messages %}
-
-
-{% for message in messages %}
 <div id="alerthai">
+
+{% if messages %}
+{% for message in messages %}
     <div class="chip" style="display:contents">
         <div class="card-panel {{message.tags}} darken-1 ">
             <i class="material-icons white-text">info</i>
@@ -21,9 +20,9 @@
             <i class="close material-icons white-text right">close</i>
         </div>
     </div>
-</div>
 {% endfor %}
 {% endif %}
+</div>
 
 
 

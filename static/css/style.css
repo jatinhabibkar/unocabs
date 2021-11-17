@@ -23,20 +23,3 @@
   color: #424242 !important;
 
 }
-
-/* map css */
-.mytitle{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.myparag{
-  line-height: 5px;
-
-}
-
-
-.myparag p{
-  text-align: left;
-}

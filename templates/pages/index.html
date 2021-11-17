@@ -11,6 +11,37 @@
 
 <script>
     mapboxgl.accessToken = 'pk.eyJ1Ijoiam9raXNhIiwiYSI6ImNrdjlnZ3VzbTI5ZWMyb3MzODdjZHJtdWoifQ.SnSidhgmX2ScTl7ej7--rQ';
+    var ridesdata = '{{rides|safe}}'
+    console.log(JSON.parse(ridesdata))
+    const data = JSON.parse(ridesdata)
+    var myfeatures = []
+
+    for (let index = 0; index < JSON.parse(ridesdata).length; index++) {
+        const {
+            fields,
+            pk
+        } = JSON.parse(ridesdata)[index];
+        myfeatures.push({
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': [fields.Scordlog, fields.Scordlat]
+            },
+            'properties': {
+                'id': pk,
+                's': fields.sourName,
+                'd': fields.destName,
+                ...fields
+            }
+        })
+    }
+
+    const geojson = {
+        'type': 'FeatureCollection',
+        'features': myfeatures
+    }
+
+    console.log(geojson);
     var userlog = 0
     var userlat = 0
     var km = 1
@@ -19,24 +50,8 @@
         container: 'map', // container ID
         style: 'mapbox://styles/mapbox/streets-v11', // style URL
         center: [73.1307, 18.9968], // starting position [lng, lat]
-        zoom: 10 // starting zoom
+        zoom: 12 // starting zoom
     })
-
-    const geojson = {
-        'type': 'FeatureCollection',
-
-        'features': [{
-            'type': 'Feature',
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [73.1307, 18.9968]
-            },
-            'properties': {
-                'title': 'home',
-                'description': 'nimbeshwar angan'
-            }
-        }]
-    };
 
 
     var glc = new mapboxgl.GeolocateControl({
@@ -52,7 +67,6 @@
     glc.on('geolocate', (e) => {
         userlat = e.coords.latitude
         userlog = e.coords.longitude
-        plotpoints()
     })
 
     function sendapirequest() {
@@ -65,10 +79,22 @@
     // user location 
     map.addControl(glc)
 
+    plotpoints()
+
     function plotpoints() {
-        console.log("plotting ");
         for (const feature of geojson.features) {
             const el = document.createElement('div');
+            const {
+                s,
+                d,
+                vehicle,
+                Rdate,
+                Rtime,
+                id,
+                cost,
+                description,
+                name
+            } = feature.properties
             el.className = 'marker';
             new mapboxgl.Marker(el)
                 .setLngLat(feature.geometry.coordinates)
@@ -78,14 +104,23 @@
                     }) // add popups
                     .setHTML(
                         `
-                        <h5>panvel <i class= "material-icons">directions_bike</i> pune</h5>
-                        <p>Date & Time : 21/10/2021 2:00pm</p>
-                        <a class="waves-effect waves-light btn white-text black">book the cab</a>
+                        <strong class="mytitle"><div>${s.split(',')[0]} </div>  <i class= "material-icons myicon">${vehicle}</i> <div>${d.split(',')[0]}</div></strong>
+                        <div class="myparag">
+                            
+                            <p> <b>Name</b> : ${name} </p>
+                            <p> <b>Date</b> : ${Rdate} </p>
+                            <p> <b>Time</b> : ${Rtime} </p>
+                            <p> <b>Cost</b> : ${cost} </p> 
+                        
+                        </div>
+                        <a class="waves-effect waves-light btn white-text black" href="${'/apply/'+id}" >book the cab</a>
                         
                         `
                     )
                 )
                 .addTo(map);
+
+
         }
     }
 </script>

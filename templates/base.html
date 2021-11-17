@@ -18,11 +18,16 @@
     <!-- icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
     <title>unocabs</title>
 </head>
 
 
 <body>
+    <h4 class="right">{{user.id}}</h4>
     <!-- Load the `mapbox-gl-geocoder` plugin. -->
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
@@ -33,10 +38,10 @@
     {% include 'partials/_menu.html' %}
 
     <!-- backgroung white backgrund menu -->
-    <div class="menu" id="menu"> </div>
+    <div class="menu z-depth-2" id="menu"> </div>
 
     <!-- just icon cross and hamburger -->
-    <div id="navbar" onclick="showmenu()">
+    <div id="navbar" onclick="showmenu()" >
         <i class="material-icons nav-icon">dehaze</i>
     </div>
 
