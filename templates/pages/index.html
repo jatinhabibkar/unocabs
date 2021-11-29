@@ -24,10 +24,14 @@
         myfeatures.push({
             'type': 'Feature',
             'geometry': {
-                'type': 'Point',
-                'coordinates': [fields.Scordlog, fields.Scordlat]
+                'type': 'LineString',
+                'coordinates': [
+                    [fields.Scordlog, fields.Scordlat],
+                    [fields.Dcordlog, fields.Dcordlat],
+                ]
             },
             'properties': {
+                'index': index,
                 'id': pk,
                 's': fields.sourName,
                 'd': fields.destName,
@@ -78,13 +82,18 @@
     }
     // user location 
     map.addControl(glc)
-
-    plotpoints()
+    map.on('load', () => {
+        plotpoints()
+    })
 
     function plotpoints() {
         for (const feature of geojson.features) {
+            // marker 1
             const el = document.createElement('div');
+            el.style.borderRadius = '25px'
+            el.className = 'marker';
             const {
+                index,
                 s,
                 d,
                 vehicle,
@@ -93,35 +102,99 @@
                 id,
                 cost,
                 description,
-                name
+                name,
+                email
             } = feature.properties
-            el.className = 'marker';
             new mapboxgl.Marker(el)
-                .setLngLat(feature.geometry.coordinates)
+                .setLngLat(feature.geometry.coordinates[0])
                 .setPopup(
                     new mapboxgl.Popup({
                         offset: 25
                     }) // add popups
                     .setHTML(
-                        `
-                        <strong class="mytitle"><div>${s.split(',')[0]} </div>  <i class= "material-icons myicon">${vehicle}</i> <div>${d.split(',')[0]}</div></strong>
+                        ` <i class= "material-icons myicon">${vehicle}</i> 
+                        <br>
+                        
                         <div class="myparag">
-                            
+                            <p> <b> From </b> : ${s.split(',')[0]} </p> 
+                        <p> <b> To </b> : ${d.split(',')[0]}</p>
                             <p> <b>Name</b> : ${name} </p>
+                            <p> <b>Email</b> : ${email} </p>
+
+                            <p> <b>Date</b> : ${Rdate} </p>
+                            <p> <b>Time</b> : ${Rtime} </p>
+                            <p> <b>Cost</b> : ${cost} </p> 
+                            
+                        
+                        </div>
+                            <a class="waves-effect waves-light btn white-text black" href="${'/apply/'+id}" >book the cab</a>
+
+                        `
+                    )
+                )
+                .addTo(map);
+
+            // marker 1
+            const el1 = document.createElement('div');
+            el1.style.borderRadius = '25px'
+            el1.className = 'marker';
+            new mapboxgl.Marker(el1)
+                .setLngLat(feature.geometry.coordinates[1])
+                .setPopup(
+                    new mapboxgl.Popup({
+                        offset: 25
+                    }) // add popups
+                    .setHTML(
+                        ` <i class= "material-icons myicon">${vehicle}</i> 
+                        <br>
+                        
+                        <div class="myparag">
+                            <p> <b> From </b> : ${s.split(',')[0]} </p> 
+                        <p> <b> To </b> : ${d.split(',')[0]}</p>
+                            <p> <b>Name</b> : ${name} </p>
+                            <p> <b>Email</b> : ${email} </p>
+
                             <p> <b>Date</b> : ${Rdate} </p>
                             <p> <b>Time</b> : ${Rtime} </p>
                             <p> <b>Cost</b> : ${cost} </p> 
                         
                         </div>
-                        <a class="waves-effect waves-light btn white-text black" href="${'/apply/'+id}" >book the cab</a>
-                        
+                            <a class="waves-effect waves-light btn white-text black" href="${'/apply/'+id}" >book the cab</a>
+
                         `
                     )
                 )
                 .addTo(map);
 
 
+
+
         }
+
+        // for (const [i,feature] of geojson.features.entries()) {
+        //     map.addSource('route', {
+        //         'type': 'geojson',
+        //         'data': {
+        //             'type': 'Feature',
+        //             'features': feature
+        //         }
+        //     });
+
+        //     map.addLayer({
+        //         'id': `route${i}`,
+        //         'source': 'route',
+        //         'type': 'line',
+        //         'paint': {
+        //             'line-width': 2,
+        //             'line-color': '#007cbf'
+        //         }
+        //     });
+        //     console.log(`route${i}`);
+        // }
+
+
+
+
     }
 </script>
 

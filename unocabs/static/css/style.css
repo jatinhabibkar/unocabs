@@ -25,18 +25,23 @@
 }
 
 /* map css */
-.mytitle{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+
 
 .myparag{
   line-height: 5px;
-
+  font: optional;
 }
 
 
 .myparag p{
   text-align: left;
+}
+.mapboxgl-popup-content{
+  border-radius: 10px !important;
+}
+
+.map-links{
+  display: flex;
+  align-items: center;
+  
 }

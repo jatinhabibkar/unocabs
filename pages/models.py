@@ -18,7 +18,7 @@ class Ride(models.Model):
     cost = models.IntegerField()
     message = models.CharField(max_length=200)
     vehicle = models.CharField(max_length=20)
-    applied =models.TextField(null=True)
+    applied =models.TextField(blank=True)
     sourName = models.CharField(max_length=500)
     Scordlog = models.DecimalField(decimal_places=6,max_digits=13)
     Scordlat = models.DecimalField(decimal_places=6,max_digits=13)

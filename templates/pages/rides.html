@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% load filter %}
+
 {% block content %}
 
 
@@ -14,102 +16,198 @@
     <div class="row">
         <div class="col s12">
             <ul class="tabs">
-                <li class="tab col s3 text-darken "><a href="#test1">Booked Trips</a></li>
-                <li class="tab col s3"><a class="active" href="#test2">My Trips</a></li>
+                <li class="tab col s3"><a class="active" href="#booked">Booked Trips</a></li>
+                <li class="tab col s3"><a href="#mycabs">My Trips</a></li>
             </ul>
         </div>
-        <div id="test1" class="col s12">
+        <div id="booked" class="col s12">
 
 
+
+            <br>
+            {% if render0 %}
 
             <div class="row">
-                <div class="col s12 m6">
-                    <div class="card-panel teal">
-                        <span class="white-text">I am a very simple card. I am good at containing small bits of
-                            information.
-                            I am convenient because I require little markup to use effectively. I am similar to what is
-                            called a
-                            panel in other frameworks.
-                        </span>
+                {% for ride,applied in applied_data %}
+
+                <form class="col m6 s12 blue-grey darken-4 box ">
+                    {% csrf_token %}
+                    <div class=" blue-grey darken-4 white-text">
+                        <div class="white-text">
+                            <p> <b> From </b> : {{ride.sourName}} </p>
+                            <p> <b> To </b> : {{ride.destName}}</p>
+                            <p> <b> Displayed Email</b> : {{ride.email}} </p>
+
+                            <p> <b>Date for trip</b> : {{ride.Rdate}} </p>
+                            <p> <b>Time for trip</b> : {{ride.Rtime}} </p>
+                            <p> <b>Cost for trip</b> : {{ride.cost}} </p>
+                            <p> <b>Number of Users applied</b> : {{applied}}</p>
+
+                            <!-- step2 link -->
+                            {% if not ride.step2 and ride.step1 %}
+                            <p> <a class=" myb waves-effect waves-light btn white-text green" type="submit" href="/changestep/2/cab/{{ride.id}}">start
+                                    the ride &nbsp;<i class="material-icons">{{ride.vehicle}}
+                                    </i></a></p>
+                            {% endif %}
+
+                            {% if not ride.step1 %}
+                            <p> <a class=" myb waves-effect waves-light btn white-text red" href="/deluser/{{ride.id}}">
+                                    discard <i class="material-icons">delete</i></a></p>
+                            {% endif %}
+
+                            {% if ride.step2 and ride.step1 and ride.step3%}
+                            <p> <a class=" myb waves-effect waves-light btn white-text amber accent-4" href="#">Trip done</a></p>
+                            {% endif %}
+                            
+
+                        </div>
                     </div>
-                </div>
-                <div class="col s12 m6">
-                    <div class="card-panel teal">
-                        <span class="white-text">I am a very simple card. I am good at containing small bits of
-                            information.
-                            I am convenient because I require little markup to use effectively. I am similar to what is
-                            called a
-                            panel in other frameworks.
-                        </span>
-                    </div>
-                </div>
-                <div class="col s12 m6">
-                    <div class="card-panel teal">
-                        <span class="white-text">I am a very simple card. I am good at containing small bits of
-                            information.
-                            I am convenient because I require little markup to use effectively. I am similar to what is
-                            called a
-                            panel in other frameworks.
-                        </span>
-                    </div>
-                </div>
+                </form>
+
+                {% endfor %}
             </div>
-
-
-
-
-
-        </div>
-        <div id="test2" class="col s12">
-
-
+            {% else %}
             <div class="container">
-                <div class="item">
-                    <h5>pune to panvel</h5>
-
-                </div>
-                <div class="item">
-                    <h5>pune to panvel</h5>
-
-                </div>
+                <h3 class="center"><i class="center face material-icons grey-text">mood_bad</i></h3>
+                <h3 class="center grey-text">No Cabs Found</h3>
             </div>
+            {% endif %}
+
+
+
 
 
         </div>
+        <div id="mycabs" class="col s12">
+            <br>
+            {% if render %}
+            <div class="row">
+                {% for ride,user in mydata %}
+
+                <form action="{% url 'rides' %}" method="POST" class="col m6 s12 blue-grey darken-4 box " id="myForm">
+                    {% csrf_token %}
+                    <div class=" blue-grey darken-4 white-text">
+                        <div class="white-text">
+                            <p> <b> From </b> : {{ride.sourName}} </p>
+                            <p> <b> To </b> : {{ride.destName}}</p>
+                            <p> <b> Displayed Email</b> : {{ride.email}} </p>
+
+                            <p> <b>Date for trip</b> : {{ride.Rdate}} </p>
+                            <p> <b>Time for trip</b> : {{ride.Rtime}} </p>
+                            <p> <b>Cost for trip</b> : {{ride.cost}} Rs </p>
+                            <input type="hidden" value="{{ride.id}}" name="cabid">
+
+                            {% if ride.customerId == -1 %}
+                            <p> <b>Applied users</b></p>
+                            <select name="customerid" class="browser-default" required>
+                                <option value="" disabled selected>Choose your customer</option>
+                                {% for u in user %}
+                                <option class="text-white" value="{{u.id}}">{{u.email}}</option>
+                                {% endfor %}
+                            </select>
+                            <p> <button class=" myb waves-effect waves-light btn white-text green" type="submit"><i
+                                        class="material-icons">start</i></button></p>
+
+                            <p> <a class=" myb waves-effect waves-light btn white-text red"
+                                    href="/delcab/{{ride.id}}"><i class="material-icons">delete</i></a></p>
+                            {% else %}
+                                {% for u in user %}
+                                    {% if ride.customerId == u.id %}
+                                        <p> <b>Customer</b> : {{u.email}} </p>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if not ride.step2 and ride.step1 %}
+                            <p> <a href="#" class=" myb waves-effect waves-light btn white-text blue"
+                                    type="submit">waiting for client<i class="material-icons">timer
+                                    </i></a></p>
+                            {% endif %}
+
+                            <!-- step 3rd -->
+                            {% if ride.step2 and ride.step1 and not ride.step3%}
+                            <p> <a class=" myb waves-effect waves-light btn white-text green" href="/changestep/3/cab/{{ride.id}}">End the trip&nbsp;<i
+                                        class="material-icons">check_circle
+                                    </i></a></p>
+                            {% endif %}
+
+                            {% if ride.step2 and ride.step1 and ride.step3%}
+                            <p> <a class=" myb waves-effect waves-light btn white-text amber accent-4" href="#">Trip done</a></p>
+                            {% endif %}
+
+
+                            <input type="submit" id="sf" style="display: none;" value="Submit">
+                        </div>
+                    </div>
+                </form>
+
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="container">
+                <h3 class="center"><i class="center face material-icons grey-text">mood_bad</i></h3>
+                <h3 class="center grey-text">No Cabs Found</h3>
+            </div>
+            {% endif %}
+        </div>
+
+
+
+
+
     </div>
 
 
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var el = document.querySelectorAll('.tabs');
+            var instance = M.Tabs.init(el);
+        });
+    </script>
+
+    <style>
+        .tabs .tab a:hover,
+        .tabs .tab a.active {
+            background-color: #24242411 !important;
+            color: #242424 !important;
+
+        }
+
+        .indicator {
+            background-color: #242424 !important;
+        }
 
 
-</div>
+        .tabs .tab a {
+            color: #2424249c;
+        }
 
+        .myb {
+            float: right;
+            border-radius: 100px;
+            margin: 5px;
+            display: flex;
+        }
 
+        .face {
+            font-size: larger;
+            margin-bottom: 0 !important;
+        }
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var el = document.querySelectorAll('.tabs');
-        var instance = M.Tabs.init(el);
-    });
-</script>
+        .text-white input {
+            color: white !important;
+        }
 
-<style>
-    .tabs .tab a:hover,
-    .tabs .tab a.active {
-        background-color: #24242411 !important;
-        color: #242424 !important;
+        .box {
+            border: 2px dashed white;
+            cursor: pointer;
+        }
+    </style>
 
-    }
-
-    .indicator {
-        background-color: #242424 !important;
-    }
-
-
-    .tabs .tab a {
-        color: #2424249c;
-
-    }
-</style>
-
-{% endblock content %}
+    {% endblock content %}
