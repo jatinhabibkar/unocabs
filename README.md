@@ -3,7 +3,7 @@
 <p align="center"><a href="https://unocabs.herokuapp.com/">Unocabs</a></p>
 
 # DETAILS
-Web application that let's you create/books a cab service. It includes to track a your ride service and 3 step flow After booking a ride.
+Web application that let's you create/books a cab service. It includes to track your ride service and 3 step flow After booking a ride.
 
 # Technology Stack
 <ul>
